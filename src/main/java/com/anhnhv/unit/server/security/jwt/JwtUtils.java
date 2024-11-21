@@ -7,10 +7,13 @@ import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 @Component
 @Slf4j
@@ -23,17 +26,21 @@ public class JwtUtils {
 
     public String generateJwtToken(Authentication authentication){
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
-
+        List<String> role = userPrincipal.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
         return Jwts.builder()
                 .setSubject(userPrincipal.getUsername())
+                .setIssuer("unit")
+                .claim("id", userPrincipal.getId())
+                .claim("roles", role)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime() + jwtExpirationMs))
-                .signWith(key(), SignatureAlgorithm.ES256)
+                .signWith(key(), SignatureAlgorithm.HS256)
+                .setId(String.valueOf(UUID.randomUUID()))
                 .compact();
     }
 
     private Key key(){
-        return Keys.hmacShaKeyFor(Decoders.BASE64URL.decode(jwtSecret));
+        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
     }
 
     public boolean validateToken(String jwt) {

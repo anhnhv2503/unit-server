@@ -7,4 +7,6 @@ import com.anhnhv.unit.server.response.UserDTO;
 public interface IUserService {
 
     UserDTO register(UserRequest user);
+
+    UserDTO getAuthenticatedUser();
 }

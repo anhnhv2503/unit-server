@@ -9,6 +9,9 @@ import com.anhnhv.unit.server.request.UserRequest;
 import com.anhnhv.unit.server.response.UserDTO;
 import com.anhnhv.unit.server.services.IUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -20,6 +23,7 @@ public class UserService implements IUserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
     @Override
     public UserDTO register(UserRequest request) {
 
@@ -34,8 +38,8 @@ public class UserService implements IUserService {
         User user = new User();
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword());
-        user.setConfirmPassword(request.getConfirmPassword());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setConfirmPassword(passwordEncoder.encode(request.getConfirmPassword()));
         user.setDateOfBirth(null);
         user.setCreatedAt(new Date());
         user.setAvatar("https://avatars.githubusercontent.com/u/124599?v=4");
@@ -44,6 +48,16 @@ public class UserService implements IUserService {
         userRepository.save(user);
         UserMapper userMapper = new UserMapper();
 
+        return userMapper.mapToUserDTO(user);
+    }
+
+    @Override
+    public UserDTO getAuthenticatedUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
+
+        UserMapper userMapper = new UserMapper();
         return userMapper.mapToUserDTO(user);
     }
 }

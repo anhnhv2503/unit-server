@@ -33,7 +33,7 @@ public class WebSecurityConfig {
     private final AuthEntryPointJwt unauthorizedHandler;
 
     private static final List<String> SECURED_URLS =
-            List.of("");
+            List.of("/api/user/info");
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
@@ -66,7 +66,7 @@ public class WebSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
                         auth
-//                                .requestMatchers(SECURED_URLS.toArray(String[]::new)).authenticated()
+                                .requestMatchers(SECURED_URLS.toArray(String[]::new)).authenticated()
                                 .anyRequest().permitAll()
                 );
         http.authenticationProvider(daoAuthenticationProvider());
