@@ -12,16 +12,16 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 public class AppController {
 
-//    private final AmazonClientService amazonClientService;
+    private final AmazonClientService amazonClientService;
 
     @GetMapping
     public String hello() {
         return "Hello World!";
     }
 
-//    @PostMapping("/upload")
-//    public String uploadFile(@RequestParam(name = "file") MultipartFile file){
-//        log.info("Start upload");
-//        return amazonClientService.uploadFile(file);
-//    }
+    @PostMapping("/upload")
+    public String uploadFile(@RequestParam(name = "file") MultipartFile file){
+        log.info("Start upload");
+        return amazonClientService.uploadFile(file);
+    }
 }
