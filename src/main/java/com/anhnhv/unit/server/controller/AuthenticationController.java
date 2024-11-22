@@ -1,6 +1,7 @@
 package com.anhnhv.unit.server.controller;
 
 import com.anhnhv.unit.server.request.LoginRequest;
+import com.anhnhv.unit.server.request.RefreshTokenRequest;
 import com.anhnhv.unit.server.services.impl.AuthenticationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,5 +21,10 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
         return ResponseEntity.ok(authenticationService.login(request));
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refresh(@Valid @RequestBody RefreshTokenRequest request){
+        return ResponseEntity.ok(authenticationService.refreshToken(request));
     }
 }

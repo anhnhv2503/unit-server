@@ -1,10 +1,13 @@
 package com.anhnhv.unit.server.security.jwt;
 
+import com.anhnhv.unit.server.entities.User;
+import com.anhnhv.unit.server.repository.UserRepository;
 import com.anhnhv.unit.server.security.services.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,15 +26,20 @@ public class JwtUtils {
     private String jwtSecret;
     @Value("${unit.app.jwtExpirationMs}")
     private int jwtExpirationMs;
+    @Autowired
+    private UserRepository userRepository;
 
-    public String generateJwtToken(Authentication authentication){
-        UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
-        List<String> role = userPrincipal.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
+    public String generateJwtToken(UserDetailsImpl userPrincipal){
+        return generateTokenFromUsername(userPrincipal.getUsername());
+    }
+
+    public String generateTokenFromUsername(String username){
+        User user = userRepository.findByUsername(username).get();
         return Jwts.builder()
-                .setSubject(userPrincipal.getUsername())
+                .setSubject(username)
                 .setIssuer("unit")
-                .claim("id", userPrincipal.getId())
-                .claim("roles", role)
+                .claim("id", user.getId())
+                .claim("roles", user.getRoles().stream().findFirst().get().getRoleName())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime() + jwtExpirationMs))
                 .signWith(key(), SignatureAlgorithm.HS256)

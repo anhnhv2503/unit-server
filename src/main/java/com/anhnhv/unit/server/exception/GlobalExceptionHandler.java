@@ -16,4 +16,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, String>> handleRuntimeException(RuntimeException ex) {
         return new ResponseEntity<>(Map.of("message", ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(RefreshTokenException.class)
+    public ResponseEntity<Map<String, String>> handleRefreshTokenException(RefreshTokenException ex) {
+        return new ResponseEntity<>(Map.of("message", ex.getMessage()), HttpStatus.FORBIDDEN);
+    }
 }
