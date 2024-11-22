@@ -1,6 +1,7 @@
 package com.anhnhv.unit.server.controller;
 
 import com.anhnhv.unit.server.request.LoginRequest;
+import com.anhnhv.unit.server.request.LogoutRequest;
 import com.anhnhv.unit.server.request.RefreshTokenRequest;
 import com.anhnhv.unit.server.services.impl.AuthenticationService;
 import jakarta.validation.Valid;
@@ -26,5 +27,10 @@ public class AuthenticationController {
     @PostMapping("/refresh")
     public ResponseEntity<?> refresh(@Valid @RequestBody RefreshTokenRequest request){
         return ResponseEntity.ok(authenticationService.refreshToken(request));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@Valid @RequestBody LogoutRequest request){
+        return ResponseEntity.ok(authenticationService.logout(request));
     }
 }

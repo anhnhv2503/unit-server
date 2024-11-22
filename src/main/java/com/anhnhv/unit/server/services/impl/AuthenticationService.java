@@ -1,9 +1,11 @@
 package com.anhnhv.unit.server.services.impl;
 
 import com.anhnhv.unit.server.entities.RefreshToken;
+import com.anhnhv.unit.server.entities.User;
 import com.anhnhv.unit.server.exception.RefreshTokenException;
 import com.anhnhv.unit.server.repository.UserRepository;
 import com.anhnhv.unit.server.request.LoginRequest;
+import com.anhnhv.unit.server.request.LogoutRequest;
 import com.anhnhv.unit.server.request.RefreshTokenRequest;
 import com.anhnhv.unit.server.response.AuthenticationResponse;
 import com.anhnhv.unit.server.security.jwt.JwtUtils;
@@ -27,6 +29,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
     private final RefreshTokenService refreshTokenService;
+    private final UserRepository userRepository;
 
     public AuthenticationResponse login(LoginRequest request) {
         Authentication authentication = authenticationManager
@@ -59,5 +62,17 @@ public class AuthenticationService {
                     return AuthenticationResponse.builder().token(token).refreshToken(refreshToken).build();
                 })
                 .orElseThrow(() -> new RefreshTokenException( "Refresh token is not in database!"));
+    }
+
+    public String logout(LogoutRequest request){
+        String token = request.getToken();
+
+        String username = jwtUtils.getUserNameFromJwtToken(token);
+        User user = userRepository.findByUsername(username).get();
+
+        if(refreshTokenService.deleteByUserId(user.getId()) != 0){
+            return "Logout Success";
+        }
+        return null;
     }
 }
