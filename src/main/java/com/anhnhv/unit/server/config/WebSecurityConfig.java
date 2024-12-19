@@ -1,8 +1,8 @@
 package com.anhnhv.unit.server.config;
 
-import com.anhnhv.unit.server.security.jwt.AuthEntryPointJwt;
-import com.anhnhv.unit.server.security.jwt.AuthTokenFilter;
-import com.anhnhv.unit.server.security.services.UserDetailsServiceImpl;
+import com.anhnhv.unit.server.config.security.jwt.AuthEntryPointJwt;
+import com.anhnhv.unit.server.config.security.jwt.AuthTokenFilter;
+import com.anhnhv.unit.server.config.security.services.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,7 +33,7 @@ public class WebSecurityConfig {
     private final AuthEntryPointJwt unauthorizedHandler;
 
     private static final List<String> SECURED_URLS =
-            List.of("/api/user/info");
+            List.of("/api/user/info", "/api/posts/**");
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {

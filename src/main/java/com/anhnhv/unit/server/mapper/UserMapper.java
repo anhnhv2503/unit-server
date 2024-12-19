@@ -1,7 +1,7 @@
 package com.anhnhv.unit.server.mapper;
 
 import com.anhnhv.unit.server.entities.User;
-import com.anhnhv.unit.server.response.UserDTO;
+import com.anhnhv.unit.server.dto.response.UserDTO;
 
 public class UserMapper {
 

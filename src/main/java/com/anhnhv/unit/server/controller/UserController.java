@@ -1,8 +1,8 @@
 package com.anhnhv.unit.server.controller;
 
+import com.anhnhv.unit.server.dto.request.UserRequest;
+import com.anhnhv.unit.server.dto.response.UserDTO;
 import com.anhnhv.unit.server.entities.User;
-import com.anhnhv.unit.server.request.UserRequest;
-import com.anhnhv.unit.server.response.UserDTO;
 import com.anhnhv.unit.server.services.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ public class UserController {
     }
 
     @GetMapping("/info")
-    public ResponseEntity<UserDTO> getUserInfo(){
+    public ResponseEntity<User> getUserInfo(){
         return ResponseEntity.ok(userService.getAuthenticatedUser());
     }
 }

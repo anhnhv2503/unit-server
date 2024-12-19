@@ -1,8 +1,8 @@
 package com.anhnhv.unit.server.controller;
 
-import com.anhnhv.unit.server.request.LoginRequest;
-import com.anhnhv.unit.server.request.LogoutRequest;
-import com.anhnhv.unit.server.request.RefreshTokenRequest;
+import com.anhnhv.unit.server.dto.request.LoginRequest;
+import com.anhnhv.unit.server.dto.request.LogoutRequest;
+import com.anhnhv.unit.server.dto.request.RefreshTokenRequest;
 import com.anhnhv.unit.server.services.impl.AuthenticationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

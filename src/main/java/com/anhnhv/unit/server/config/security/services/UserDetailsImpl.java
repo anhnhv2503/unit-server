@@ -1,4 +1,4 @@
-package com.anhnhv.unit.server.security.services;
+package com.anhnhv.unit.server.config.security.services;
 
 import com.anhnhv.unit.server.entities.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;

@@ -1,21 +1,18 @@
-package com.anhnhv.unit.server.security.jwt;
+package com.anhnhv.unit.server.config.security.jwt;
 
+import com.anhnhv.unit.server.config.security.services.UserDetailsImpl;
 import com.anhnhv.unit.server.entities.User;
 import com.anhnhv.unit.server.repository.UserRepository;
-import com.anhnhv.unit.server.security.services.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 @Component

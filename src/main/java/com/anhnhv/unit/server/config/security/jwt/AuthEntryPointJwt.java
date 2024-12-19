@@ -1,4 +1,4 @@
-package com.anhnhv.unit.server.security.jwt;
+package com.anhnhv.unit.server.config.security.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;

@@ -5,8 +5,8 @@ import com.anhnhv.unit.server.entities.User;
 import com.anhnhv.unit.server.mapper.UserMapper;
 import com.anhnhv.unit.server.repository.RoleRepository;
 import com.anhnhv.unit.server.repository.UserRepository;
-import com.anhnhv.unit.server.request.UserRequest;
-import com.anhnhv.unit.server.response.UserDTO;
+import com.anhnhv.unit.server.dto.request.UserRequest;
+import com.anhnhv.unit.server.dto.response.UserDTO;
 import com.anhnhv.unit.server.services.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -40,7 +40,7 @@ public class UserService implements IUserService {
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setConfirmPassword(passwordEncoder.encode(request.getConfirmPassword()));
-        user.setDateOfBirth(null);
+        user.setDateOfBirth(request.getDateOfBirth());
         user.setCreatedAt(new Date());
         user.setAvatar("https://avatars.githubusercontent.com/u/124599?v=4");
         Role roleUser = roleRepository.findByRoleName("ROLE_USER").orElseThrow(() -> new RuntimeException("Role not exist"));
@@ -52,12 +52,10 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserDTO getAuthenticatedUser() {
+    public User getAuthenticatedUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
 
-        UserMapper userMapper = new UserMapper();
-        return userMapper.mapToUserDTO(user);
+        return userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
     }
 }

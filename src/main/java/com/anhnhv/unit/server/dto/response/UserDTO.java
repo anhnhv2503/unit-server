@@ -1,4 +1,4 @@
-package com.anhnhv.unit.server.response;
+package com.anhnhv.unit.server.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

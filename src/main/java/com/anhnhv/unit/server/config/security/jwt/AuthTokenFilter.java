@@ -1,6 +1,6 @@
-package com.anhnhv.unit.server.security.jwt;
+package com.anhnhv.unit.server.config.security.jwt;
 
-import com.anhnhv.unit.server.security.services.UserDetailsServiceImpl;
+import com.anhnhv.unit.server.config.security.services.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

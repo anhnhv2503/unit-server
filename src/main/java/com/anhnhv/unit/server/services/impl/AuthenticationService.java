@@ -4,23 +4,21 @@ import com.anhnhv.unit.server.entities.RefreshToken;
 import com.anhnhv.unit.server.entities.User;
 import com.anhnhv.unit.server.exception.RefreshTokenException;
 import com.anhnhv.unit.server.repository.UserRepository;
-import com.anhnhv.unit.server.request.LoginRequest;
-import com.anhnhv.unit.server.request.LogoutRequest;
-import com.anhnhv.unit.server.request.RefreshTokenRequest;
-import com.anhnhv.unit.server.response.AuthenticationResponse;
-import com.anhnhv.unit.server.security.jwt.JwtUtils;
-import com.anhnhv.unit.server.security.services.UserDetailsImpl;
+import com.anhnhv.unit.server.dto.request.LoginRequest;
+import com.anhnhv.unit.server.dto.request.LogoutRequest;
+import com.anhnhv.unit.server.dto.request.RefreshTokenRequest;
+import com.anhnhv.unit.server.dto.response.AuthenticationResponse;
+import com.anhnhv.unit.server.config.security.jwt.JwtUtils;
+import com.anhnhv.unit.server.config.security.services.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

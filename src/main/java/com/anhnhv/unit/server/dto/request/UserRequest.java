@@ -1,5 +1,6 @@
-package com.anhnhv.unit.server.request;
+package com.anhnhv.unit.server.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,4 +18,6 @@ public class UserRequest {
     private String email;
     private String password;
     private String confirmPassword;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date dateOfBirth;
 }

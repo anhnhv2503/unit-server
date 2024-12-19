@@ -1,4 +1,4 @@
-package com.anhnhv.unit.server.request;
+package com.anhnhv.unit.server.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
