@@ -33,6 +33,8 @@ public class User {
     @NotEmpty(message = "Email is required")
     @Column(unique = true, nullable = false, columnDefinition = "VARCHAR(255) COLLATE utf8mb4_unicode_ci")
     private String email;
+    private String firstName;
+    private String lastName;
     @JsonIgnore
     @NotEmpty
     @Size(min = 6, message = "Password must be at least 6 characters")

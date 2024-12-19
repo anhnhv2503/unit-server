@@ -10,6 +10,8 @@ public class UserMapper {
         userDTO.setId(user.getId());
         userDTO.setUsername(user.getUsername());
         userDTO.setEmail(user.getEmail());
+        userDTO.setFirstName(user.getFirstName());
+        userDTO.setLastName(user.getLastName());
         userDTO.setDateOfBirth(user.getDateOfBirth());
         userDTO.setAvatar(user.getAvatar());
         userDTO.setCreatedAt(user.getCreatedAt());

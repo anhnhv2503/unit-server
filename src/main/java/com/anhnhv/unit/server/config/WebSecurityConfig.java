@@ -33,7 +33,7 @@ public class WebSecurityConfig {
     private final AuthEntryPointJwt unauthorizedHandler;
 
     private static final List<String> SECURED_URLS =
-            List.of("/api/user/info", "/api/posts/**");
+            List.of("/api/user/info", "/api/posts/create", "/api/posts/all", "/api/like/like-post/**");
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {

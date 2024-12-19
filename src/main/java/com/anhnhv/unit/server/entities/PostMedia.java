@@ -1,5 +1,6 @@
 package com.anhnhv.unit.server.entities;
 
+import com.anhnhv.unit.server.PostMediaType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
@@ -21,7 +22,8 @@ public class PostMedia {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String url;
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private PostMediaType type;
     @JsonIgnore
     @ManyToOne
     private Post post;

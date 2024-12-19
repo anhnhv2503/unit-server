@@ -38,6 +38,8 @@ public class UserService implements IUserService {
         User user = new User();
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setConfirmPassword(passwordEncoder.encode(request.getConfirmPassword()));
         user.setDateOfBirth(request.getDateOfBirth());
