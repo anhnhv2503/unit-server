@@ -37,6 +37,7 @@ public class PostService implements IPostService {
     PostMediaRepository postMediaRepository;
     LikeRepository likeRepository;
     CommentRepository commentRepository;
+    PostMapper postMapper;
 
     @Override
     public Post createPost(String content, MultipartFile[] files) {
@@ -75,14 +76,18 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public void getPost() {
-
+    public PostDTO getPost(Long id) {
+        User user = userService.getAuthenticatedUser();
+        Post post = postRepository.findById(id).orElseThrow(() -> new RuntimeException("Post not found"));
+        int likesCount = likeRepository.countByPostId(post.getId());
+        int commentsCount = commentRepository.countByPostId(post.getId());
+        boolean isLiked = likeRepository.existsByUserIdAndPostId(user.getId(), post.getId());
+        return postMapper.toPostDTO(post, isLiked, likesCount, commentsCount);
     }
 
     @Override
     public Page<PostDTO> getPosts(Pageable pageable) {
         User user = userService.getAuthenticatedUser();
-        PostMapper postMapper = new PostMapper();
         Page<Post> posts = postRepository.findAll(pageable);
         return posts.map(post -> {
             int likesCount = likeRepository.countByPostId(post.getId());

@@ -10,6 +10,6 @@ public interface IPostService {
     Post createPost(String content, MultipartFile[] files);
     void updatePost();
     void deletePost();
-    void getPost();
+    PostDTO getPost(Long id);
     Page<PostDTO> getPosts(Pageable pageable);
 }
