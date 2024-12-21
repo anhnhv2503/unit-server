@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -90,6 +91,19 @@ public class PostService implements IPostService {
         User user = userService.getAuthenticatedUser();
         Page<Post> posts = postRepository.findAll(pageable);
         return posts.map(post -> {
+            int likesCount = likeRepository.countByPostId(post.getId());
+            int commentsCount = commentRepository.countByPostId(post.getId());
+            boolean isLiked = likeRepository.existsByUserIdAndPostId(user.getId(), post.getId());
+            return postMapper.toPostDTO(post, isLiked, likesCount, commentsCount);
+        });
+    }
+
+    @Override
+    public Page<PostDTO> getUserPosts(Long userId, int page) {
+        User user = userService.getAuthenticatedUser();
+        Pageable pageable = PageRequest.of(page-1, 5);
+        Page<Post> userPosts = postRepository.findAllByUserIdOrderByCreatedAtDesc(userId, pageable);
+        return userPosts.map(post -> {
             int likesCount = likeRepository.countByPostId(post.getId());
             int commentsCount = commentRepository.countByPostId(post.getId());
             boolean isLiked = likeRepository.existsByUserIdAndPostId(user.getId(), post.getId());

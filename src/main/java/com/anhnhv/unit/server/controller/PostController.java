@@ -38,4 +38,9 @@ public class PostController {
     public ResponseEntity<PostDTO> getPost(@PathVariable Long id) {
         return ResponseEntity.ok(postService.getPost(id));
     }
+
+    @GetMapping("/user/post/{userId}/{page}")
+    public ResponseEntity<?> getPostsByUser(@PathVariable Long userId, @PathVariable int page){
+        return ResponseEntity.ok(postService.getUserPosts(userId, page));
+    }
 }

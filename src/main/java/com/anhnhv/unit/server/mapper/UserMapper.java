@@ -2,7 +2,9 @@ package com.anhnhv.unit.server.mapper;
 
 import com.anhnhv.unit.server.entities.User;
 import com.anhnhv.unit.server.dto.response.UserDTO;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UserMapper {
 
     public UserDTO mapToUserDTO(User user) {

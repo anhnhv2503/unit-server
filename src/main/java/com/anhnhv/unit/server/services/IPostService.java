@@ -12,4 +12,5 @@ public interface IPostService {
     void deletePost();
     PostDTO getPost(Long id);
     Page<PostDTO> getPosts(Pageable pageable);
+    Page<PostDTO> getUserPosts(Long userId, int page);
 }

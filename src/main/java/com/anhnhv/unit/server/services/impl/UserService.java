@@ -24,6 +24,7 @@ public class UserService implements IUserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserMapper userMapper;
     @Override
     public UserDTO register(UserRequest request) {
 
@@ -48,7 +49,6 @@ public class UserService implements IUserService {
         Role roleUser = roleRepository.findByRoleName("ROLE_USER").orElseThrow(() -> new RuntimeException("Role not exist"));
         user.setRoles(Set.of(roleUser));
         userRepository.save(user);
-        UserMapper userMapper = new UserMapper();
 
         return userMapper.mapToUserDTO(user);
     }

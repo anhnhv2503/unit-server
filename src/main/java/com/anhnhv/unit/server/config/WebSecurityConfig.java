@@ -37,7 +37,8 @@ public class WebSecurityConfig {
                     "/api/posts/create",
                     "/api/posts/all",
                     "/api/like/like-post/**",
-                    "/api/posts/detail/**");
+                    "/api/posts/detail/**",
+                    "/api/posts/user/post/**");
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {

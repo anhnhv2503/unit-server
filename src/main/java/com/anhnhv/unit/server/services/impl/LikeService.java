@@ -28,6 +28,7 @@ public class LikeService implements ILikeService {
     PostRepository postRepository;
     UserRepository userRepository;
     IUserService userService;
+    LikeMapper likeMapper;
 
     @Override
     public LikeDTO likePost(Long postId) {
@@ -44,7 +45,6 @@ public class LikeService implements ILikeService {
         like.setPost(post);
         likeRepository.save(like);
 
-        LikeMapper likeMapper = new LikeMapper();
         return likeMapper.toLikeDTO(like);
     }
 }
