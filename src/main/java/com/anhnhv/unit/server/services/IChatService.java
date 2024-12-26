@@ -1,6 +1,8 @@
 package com.anhnhv.unit.server.services;
 
+import com.anhnhv.unit.server.entities.Conversation;
+
 public interface IChatService {
 
-    Object createChat();
+    Conversation createChat(Long userId);
 }

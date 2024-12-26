@@ -1,5 +1,8 @@
 package com.anhnhv.unit.server.services.impl;
 
+import com.anhnhv.unit.server.entities.Conversation;
+import com.anhnhv.unit.server.entities.Participant;
+import com.anhnhv.unit.server.entities.User;
 import com.anhnhv.unit.server.repository.ConversationRepository;
 import com.anhnhv.unit.server.repository.MessageRepository;
 import com.anhnhv.unit.server.repository.ParticipantRepository;
@@ -7,10 +10,15 @@ import com.anhnhv.unit.server.repository.UserRepository;
 import com.anhnhv.unit.server.services.IChatService;
 import com.anhnhv.unit.server.services.IUserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.sql.Date;
+import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ChatService implements IChatService {
 
     private final UserRepository userRepository;
@@ -20,7 +28,33 @@ public class ChatService implements IChatService {
     private final IUserService userService;
 
     @Override
-    public Object createChat() {
-        return null;
+    public Conversation createChat(Long userId) {
+        User requestUser = userService.getAuthenticatedUser();
+        User requestedUser = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Conversation isExistedConversation = conversationRepository
+                .findConversationByUserIds(requestedUser.getId(), requestUser.getId())
+                .orElseThrow(() -> new RuntimeException("Conversation not found"));
+
+        if(isExistedConversation != null) {
+            log.info("Conversation existed");
+            return isExistedConversation;
+        }
+
+        Conversation conversation = new Conversation();
+        conversation.setTitle(requestUser.getUsername() + " - " + requestedUser.getUsername());
+        conversation.setCreatedAt(Date.valueOf(LocalDate.now()));
+        conversationRepository.save(conversation);
+        Participant participant = new Participant();
+        participant.setConversation(conversation);
+        participant.setUser(requestUser);
+        participantRepository.save(participant);
+        participant = new Participant();
+        participant.setConversation(conversation);
+        participant.setUser(requestedUser);
+        participantRepository.save(participant);
+
+        return conversation;
     }
 }
