@@ -7,10 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/chat")
@@ -29,6 +26,16 @@ public class ChatController {
     @PostMapping("/create/new-chat/{userId}")
     public ResponseEntity<?> createChat(@PathVariable Long userId) {
         return ResponseEntity.ok(chatService.createChat(userId));
+    }
+
+    @GetMapping("/current-user/conversations")
+    public ResponseEntity<?> getAllUsersConversedWith() {
+        return ResponseEntity.ok(chatService.getAllUsersConversedWith());
+    }
+
+    @GetMapping("/conversation/{recipientId}")
+    public ResponseEntity<?> getMessageByConversationId(@PathVariable Long recipientId) {
+        return ResponseEntity.ok(chatService.getMessageByConversationId(recipientId));
     }
 
 }

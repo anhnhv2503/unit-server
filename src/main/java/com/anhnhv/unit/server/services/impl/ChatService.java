@@ -1,8 +1,11 @@
 package com.anhnhv.unit.server.services.impl;
 
+import com.anhnhv.unit.server.dto.response.UserDTO;
 import com.anhnhv.unit.server.entities.Conversation;
+import com.anhnhv.unit.server.entities.Message;
 import com.anhnhv.unit.server.entities.Participant;
 import com.anhnhv.unit.server.entities.User;
+import com.anhnhv.unit.server.mapper.UserMapper;
 import com.anhnhv.unit.server.repository.ConversationRepository;
 import com.anhnhv.unit.server.repository.MessageRepository;
 import com.anhnhv.unit.server.repository.ParticipantRepository;
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +30,28 @@ public class ChatService implements IChatService {
     private final ConversationRepository conversationRepository;
     private final MessageRepository messageRepository;
     private final IUserService userService;
+    private final UserMapper userMapper;
+
+    @Override
+    public List<UserDTO> getAllUsersConversedWith() {
+        User user = userService.getAuthenticatedUser();
+        List<User> currentChatUsers = participantRepository.findAllUsersConversedWith(user.getId());
+
+        return currentChatUsers.stream()
+                .map(userMapper::mapToUserDTO)
+                .toList();
+    }
+
+    @Override
+    public List<Message> getMessageByConversationId(Long recipientId) {
+
+        User requestUser = userService.getAuthenticatedUser();
+        Conversation conversation = conversationRepository.findConversationByUserIds(requestUser.getId(), recipientId)
+                .orElseThrow(() -> new RuntimeException("Conversation not found"));
+
+
+        return messageRepository.findByConversationId(conversation.getId());
+    }
 
     @Override
     public Conversation createChat(Long userId) {

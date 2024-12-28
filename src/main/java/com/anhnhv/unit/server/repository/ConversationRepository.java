@@ -15,4 +15,12 @@ public interface ConversationRepository extends JpaRepository<Conversation, Long
             "WHERE p1.user.id = :userId1 AND p2.user.id = :userId2 ")
     Optional<Conversation> findConversationByUserIds(@Param("userId1") Long userId1,
                                                      @Param("userId2") Long userId2);
+
+//    @Query("SELECT c FROM Conversation c " +
+//            "JOIN Participant p1 ON p1.conversation.id = c.id " +
+//            "JOIN Participant p2 ON p2.conversation.id = c.id " +
+//            "WHERE p1.user.id = :userId1 AND p2.user.id = :userId2 " +
+//            "GROUP BY c.id HAVING COUNT(DISTINCT p1.user.id) = 2")
+//    Optional<Conversation> findConversationByUserIds(@Param("userId1") Long userId1,
+//                                                     @Param("userId2") Long userId2);
 }
