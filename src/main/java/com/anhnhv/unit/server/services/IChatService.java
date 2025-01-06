@@ -1,5 +1,7 @@
 package com.anhnhv.unit.server.services;
 
+import com.anhnhv.unit.server.dto.request.MessagePayload;
+import com.anhnhv.unit.server.dto.response.MessageDTO;
 import com.anhnhv.unit.server.dto.response.UserDTO;
 import com.anhnhv.unit.server.entities.Conversation;
 import com.anhnhv.unit.server.entities.Message;
@@ -13,5 +15,7 @@ public interface IChatService {
 
     List<UserDTO> getAllUsersConversedWith();
 
-    List<Message> getMessageByConversationId(Long recipientId);
+    List<MessageDTO> getMessageByConversationId(Long recipientId);
+
+    Message sendMessage(Long recipientId, MessagePayload message);
 }

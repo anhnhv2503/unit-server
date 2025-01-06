@@ -1,10 +1,13 @@
 package com.anhnhv.unit.server.services.impl;
 
+import com.anhnhv.unit.server.dto.request.MessagePayload;
+import com.anhnhv.unit.server.dto.response.MessageDTO;
 import com.anhnhv.unit.server.dto.response.UserDTO;
 import com.anhnhv.unit.server.entities.Conversation;
 import com.anhnhv.unit.server.entities.Message;
 import com.anhnhv.unit.server.entities.Participant;
 import com.anhnhv.unit.server.entities.User;
+import com.anhnhv.unit.server.mapper.ChatMapper;
 import com.anhnhv.unit.server.mapper.UserMapper;
 import com.anhnhv.unit.server.repository.ConversationRepository;
 import com.anhnhv.unit.server.repository.MessageRepository;
@@ -18,7 +21,9 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +36,7 @@ public class ChatService implements IChatService {
     private final MessageRepository messageRepository;
     private final IUserService userService;
     private final UserMapper userMapper;
+    private final ChatMapper chatMapper;
 
     @Override
     public List<UserDTO> getAllUsersConversedWith() {
@@ -43,14 +49,33 @@ public class ChatService implements IChatService {
     }
 
     @Override
-    public List<Message> getMessageByConversationId(Long recipientId) {
+    public List<MessageDTO> getMessageByConversationId(Long recipientId) {
 
         User requestUser = userService.getAuthenticatedUser();
         Conversation conversation = conversationRepository.findConversationByUserIds(requestUser.getId(), recipientId)
                 .orElseThrow(() -> new RuntimeException("Conversation not found"));
 
+        List<Message> messageList = messageRepository.findByConversationId(conversation.getId());
 
-        return messageRepository.findByConversationId(conversation.getId());
+        return messageList.stream()
+                .map(message ->
+                        chatMapper.toMessageDTO(message, requestUser.getId()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Message sendMessage(Long recipientId, MessagePayload message) {
+        User requestUser = userService.getAuthenticatedUser();
+        Conversation conversation = conversationRepository.findConversationByUserIds(requestUser.getId(), recipientId)
+                .orElseThrow(() -> new RuntimeException("Conversation not found"));
+
+        Message newMessage = new Message();
+        newMessage.setContent(message.getContent());
+        newMessage.setSender(requestUser);
+        newMessage.setConversation(conversation);
+        newMessage.setCreatedAt(LocalDateTime.now());
+
+        return messageRepository.save(newMessage);
     }
 
     @Override
