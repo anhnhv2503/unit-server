@@ -4,7 +4,9 @@ import com.anhnhv.unit.server.dto.request.MessagePayload;
 import com.anhnhv.unit.server.entities.Message;
 import com.anhnhv.unit.server.services.IChatService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -13,14 +15,16 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/chat")
 @RequiredArgsConstructor
+@Slf4j
 public class ChatController {
 
     private final SimpMessagingTemplate simpMessagingTemplate;
     private final IChatService chatService;
 
-    @MessageMapping("/{groupId}")
-    public Message sendMessage(@Payload Message message,@Payload String groupId) {
-        simpMessagingTemplate.convertAndSendToUser(groupId, "/queue/messages", message);
+    @MessageMapping("/chat")
+    public MessagePayload sendMessage(@Payload MessagePayload message) {
+        log.info("Message: {}", message.getContent());
+        simpMessagingTemplate.convertAndSend("/topic/messages", chatService.sendMessage(message.getRecipientId(), message));
         return message;
     }
 
