@@ -1,12 +1,10 @@
 package com.anhnhv.unit.server.controller;
 
 import com.anhnhv.unit.server.dto.request.MessagePayload;
-import com.anhnhv.unit.server.entities.Message;
 import com.anhnhv.unit.server.services.IChatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
