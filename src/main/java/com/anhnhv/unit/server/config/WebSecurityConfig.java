@@ -34,6 +34,7 @@ public class WebSecurityConfig {
 
     private static final List<String> SECURED_URLS =
             List.of("/api/user/info",
+                    "/api/user/p/**",
                     "/api/posts/create",
                     "/api/posts/all",
                     "/api/like/like-post/**",
@@ -76,6 +77,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth ->
                         auth
                                 .requestMatchers(SECURED_URLS.toArray(String[]::new)).authenticated()
+                                .requestMatchers("/ws/**").permitAll()
                                 .anyRequest().permitAll()
                 );
         http.authenticationProvider(daoAuthenticationProvider());

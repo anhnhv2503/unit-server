@@ -60,4 +60,9 @@ public class UserService implements IUserService {
 
         return userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
     }
+
+    @Override
+    public User getUserInfo(Long userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+    }
 }
