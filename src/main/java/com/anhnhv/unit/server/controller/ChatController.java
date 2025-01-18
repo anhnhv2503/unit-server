@@ -1,6 +1,7 @@
 package com.anhnhv.unit.server.controller;
 
 import com.anhnhv.unit.server.dto.request.MessagePayload;
+import com.anhnhv.unit.server.dto.response.MessageDTO;
 import com.anhnhv.unit.server.entities.Message;
 import com.anhnhv.unit.server.services.IChatService;
 import lombok.RequiredArgsConstructor;
@@ -23,10 +24,9 @@ public class ChatController {
 
     @MessageMapping("/chat")
     public void processMessage(@Payload MessagePayload messagePayload){
-        log.info("Message: {}", messagePayload.getContent());
-        Message savedMsg = chatService.sendMessage(messagePayload.getRecipientId(), messagePayload);
+        MessageDTO savedMsg = chatService.sendMessage(messagePayload);
         simpMessagingTemplate.convertAndSendToUser(
-                messagePayload.getRecipientId().toString(),
+                "chat",
                 "/queue/messages",
                 savedMsg
         );
@@ -45,11 +45,6 @@ public class ChatController {
     @GetMapping("/conversation/{recipientId}")
     public ResponseEntity<?> getMessageByConversationId(@PathVariable Long recipientId) {
         return ResponseEntity.ok(chatService.getMessageByConversationId(recipientId));
-    }
-
-    @PostMapping("/send/message/{recipientId}")
-    public ResponseEntity<?> sendMessage(@PathVariable Long recipientId, @RequestBody MessagePayload message) {
-        return ResponseEntity.ok(chatService.sendMessage(recipientId, message));
     }
 
 }

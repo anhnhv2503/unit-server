@@ -17,5 +17,5 @@ public interface IChatService {
 
     List<MessageDTO> getMessageByConversationId(Long recipientId);
 
-    Message sendMessage(Long recipientId, MessagePayload message);
+    MessageDTO sendMessage(MessagePayload message);
 }

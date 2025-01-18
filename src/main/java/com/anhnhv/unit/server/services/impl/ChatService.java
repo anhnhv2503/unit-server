@@ -64,18 +64,20 @@ public class ChatService implements IChatService {
     }
 
     @Override
-    public Message sendMessage(Long recipientId, MessagePayload message) {
-        User requestUser = userService.getAuthenticatedUser();
-        Conversation conversation = conversationRepository.findConversationByUserIds(requestUser.getId(), recipientId)
+    public MessageDTO sendMessage(MessagePayload message) {
+        User sender = userRepository.findById(message.getSenderId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Conversation conversation = conversationRepository.findConversationByUserIds(message.getSenderId(), message.getRecipientId())
                 .orElseThrow(() -> new RuntimeException("Conversation not found"));
 
         Message newMessage = new Message();
         newMessage.setContent(message.getContent());
-        newMessage.setSender(requestUser);
+        newMessage.setSender(sender);
         newMessage.setConversation(conversation);
         newMessage.setCreatedAt(LocalDateTime.now());
 
-        return messageRepository.save(newMessage);
+        messageRepository.save(newMessage);
+        return chatMapper.toMessageDTO(newMessage, sender.getId());
     }
 
     @Override

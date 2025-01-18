@@ -10,6 +10,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class MessagePayload {
+
+    private Long senderId;
     private Long recipientId;
     private String content;
 }
