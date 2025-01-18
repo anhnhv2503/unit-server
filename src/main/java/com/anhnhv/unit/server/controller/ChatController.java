@@ -21,23 +21,15 @@ public class ChatController {
     private final SimpMessagingTemplate simpMessagingTemplate;
     private final IChatService chatService;
 
-//    @MessageMapping("/chat")
-//    public void processMessage(@Payload MessagePayload messagePayload){
-//        log.info("Message: {}", messagePayload.getContent());
-//        Message savedMsg = chatService.sendMessage(messagePayload.getRecipientId(), messagePayload);
-//        simpMessagingTemplate.convertAndSendToUser(
-//                messagePayload.getRecipientId().toString(),
-//                "/queue/messages",
-//                savedMsg
-//        );
-//    }
-
-    @MessageMapping("/chat/{groupId}")
-    public Message sendToUser(@Payload MessagePayload messagePayload, @DestinationVariable String groupId){
+    @MessageMapping("/chat")
+    public void processMessage(@Payload MessagePayload messagePayload){
         log.info("Message: {}", messagePayload.getContent());
         Message savedMsg = chatService.sendMessage(messagePayload.getRecipientId(), messagePayload);
-        simpMessagingTemplate.convertAndSendToUser(groupId, "/private", savedMsg);
-        return savedMsg;
+        simpMessagingTemplate.convertAndSendToUser(
+                messagePayload.getRecipientId().toString(),
+                "/queue/messages",
+                savedMsg
+        );
     }
 
     @PostMapping("/create/new-chat/{userId}")
