@@ -43,7 +43,9 @@ public class WebSecurityConfig {
                     "/api/chat/create/new-chat/**",
                     "/api/chat/current-user/conversations",
                     "/api/chat/conversation/**",
-                    "/api/chat/send/message/**");
+                    "/api/chat/send/message/**",
+                    "/api/comments/create/**",
+                    "/api/comments/post/**");
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {

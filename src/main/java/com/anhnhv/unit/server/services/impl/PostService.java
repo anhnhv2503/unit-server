@@ -89,7 +89,7 @@ public class PostService implements IPostService {
     @Override
     public Page<PostDTO> getPosts(Pageable pageable) {
         User user = userService.getAuthenticatedUser();
-        Page<Post> posts = postRepository.findAll(pageable);
+        Page<Post> posts = postRepository.findAllByOrderByCreatedAtDesc(pageable);
         return posts.map(post -> {
             int likesCount = likeRepository.countByPostId(post.getId());
             int commentsCount = commentRepository.countByPostId(post.getId());

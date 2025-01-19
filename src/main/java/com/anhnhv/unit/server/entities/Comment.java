@@ -1,5 +1,6 @@
 package com.anhnhv.unit.server.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,8 +20,10 @@ public class Comment {
     private Long id;
     private String content;
     private String createdAt;
+    @JsonIgnore
     @ManyToOne
     private Post post;
+    @JsonIgnore
     @ManyToOne
     private User user;
 }
