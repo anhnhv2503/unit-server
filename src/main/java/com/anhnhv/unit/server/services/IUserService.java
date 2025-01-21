@@ -4,6 +4,8 @@ import com.anhnhv.unit.server.dto.request.UserRequest;
 import com.anhnhv.unit.server.dto.response.UserDTO;
 import com.anhnhv.unit.server.entities.User;
 
+import java.util.List;
+
 public interface IUserService {
 
     UserDTO register(UserRequest user);
@@ -11,4 +13,6 @@ public interface IUserService {
     User getAuthenticatedUser();
 
     User getUserInfo(Long userId);
+
+    List<UserDTO> searchUser(String username);
 }

@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
@@ -28,5 +30,10 @@ public class UserController {
     @GetMapping("/p/{userId}")
     public ResponseEntity<User> getUserInfo(@PathVariable Long userId){
         return ResponseEntity.ok(userService.getUserInfo(userId));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<UserDTO>> searchUser(@RequestParam String username){
+        return ResponseEntity.ok(userService.searchUser(username));
     }
 }

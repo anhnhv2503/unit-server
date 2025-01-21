@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -64,5 +65,12 @@ public class UserService implements IUserService {
     @Override
     public User getUserInfo(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    @Override
+    public List<UserDTO> searchUser(String username) {
+        List<User> users = userRepository.findByFirstNameOrLastName(username);
+
+        return users.stream().map(userMapper::mapToUserDTO).toList();
     }
 }
