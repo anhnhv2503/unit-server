@@ -11,6 +11,7 @@ import com.anhnhv.unit.server.dto.response.AuthenticationResponse;
 import com.anhnhv.unit.server.config.security.jwt.JwtUtils;
 import com.anhnhv.unit.server.config.security.services.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,6 +23,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthenticationService {
 
     private final AuthenticationManager authenticationManager;
@@ -52,7 +54,7 @@ public class AuthenticationService {
 
     public AuthenticationResponse refreshToken(RefreshTokenRequest request){
         String refreshToken = request.getRefreshToken();
-
+        log.info(" >>>Token has been refreshed");
         return refreshTokenService.findByToken(refreshToken).map(refreshTokenService::verifyExpiration)
                 .map(RefreshToken::getUser)
                 .map(user -> {
