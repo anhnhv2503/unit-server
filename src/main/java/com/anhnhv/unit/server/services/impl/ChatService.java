@@ -88,26 +88,25 @@ public class ChatService implements IChatService {
 
         Conversation isExistedConversation = conversationRepository
                 .findConversationByUserIds(requestedUser.getId(), requestUser.getId())
-                .orElseThrow(() -> new RuntimeException("Conversation not found"));
+                .orElseGet(() -> {
+                    Conversation conversation = new Conversation();
+                    conversation.setTitle(requestUser.getUsername() + " - " + requestedUser.getUsername());
+                    conversation.setCreatedAt(Date.valueOf(LocalDate.now()));
+                    conversationRepository.save(conversation);
+                    Participant participant = new Participant();
+                    participant.setConversation(conversation);
+                    participant.setUser(requestUser);
+                    participantRepository.save(participant);
+                    participant = new Participant();
+                    participant.setConversation(conversation);
+                    participant.setUser(requestedUser);
+                    participantRepository.save(participant);
 
-        if(isExistedConversation != null) {
-            log.info("Conversation existed");
-            return isExistedConversation;
-        }
+                    return conversation;
+                });
 
-        Conversation conversation = new Conversation();
-        conversation.setTitle(requestUser.getUsername() + " - " + requestedUser.getUsername());
-        conversation.setCreatedAt(Date.valueOf(LocalDate.now()));
-        conversationRepository.save(conversation);
-        Participant participant = new Participant();
-        participant.setConversation(conversation);
-        participant.setUser(requestUser);
-        participantRepository.save(participant);
-        participant = new Participant();
-        participant.setConversation(conversation);
-        participant.setUser(requestedUser);
-        participantRepository.save(participant);
+        log.info("Conversation existed");
+        return isExistedConversation;
 
-        return conversation;
     }
 }
