@@ -13,9 +13,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Service
@@ -26,6 +29,7 @@ public class UserService implements IUserService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
+    private final CloudinaryService cloudinaryService;
     @Override
     public UserDTO register(UserRequest request) {
 
@@ -72,5 +76,24 @@ public class UserService implements IUserService {
         List<User> users = userRepository.findByFirstNameOrLastName(username);
 
         return users.stream().map(userMapper::mapToUserDTO).toList();
+    }
+
+    @Override
+    public UserDTO update(String username, String email, String firstName, String lastName, MultipartFile imageFile) throws IOException {
+
+        User user = getAuthenticatedUser();
+        user.setUsername(username);
+        user.setEmail(email);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+
+        if(!imageFile.isEmpty()){
+            Map r = cloudinaryService.upload(imageFile);
+            String avatarUr = (String) r.get("url");
+            user.setAvatar(avatarUr);
+        }
+        userRepository.save(user);
+
+        return userMapper.mapToUserDTO(user);
     }
 }
