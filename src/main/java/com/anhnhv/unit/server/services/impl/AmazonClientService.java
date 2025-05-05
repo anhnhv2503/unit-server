@@ -9,7 +9,6 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -17,7 +16,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 
-@Service
 @Slf4j
 public class AmazonClientService {
 

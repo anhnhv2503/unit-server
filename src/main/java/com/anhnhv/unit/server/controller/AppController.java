@@ -1,10 +1,9 @@
 package com.anhnhv.unit.server.controller;
 
-import com.anhnhv.unit.server.services.impl.AmazonClientService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/test")
@@ -12,16 +11,5 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 public class AppController {
 
-    private final AmazonClientService amazonClientService;
 
-    @GetMapping
-    public String hello() {
-        return "Hello World!";
-    }
-
-    @PostMapping("/upload")
-    public String uploadFile(@RequestParam(name = "file") MultipartFile file){
-        log.info("Start upload");
-        return amazonClientService.uploadFile(file);
-    }
 }

@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/api/posts")
 @RequiredArgsConstructor
@@ -23,7 +25,7 @@ public class PostController {
 
     @PostMapping("/create")
     public ResponseEntity<Post> createPost(@RequestParam String content,
-                                           @RequestParam(required = false) MultipartFile[] files) {
+                                           @RequestParam(required = false) MultipartFile[] files) throws IOException {
         return new ResponseEntity<>(postService.createPost(content, files), HttpStatus.CREATED);
     }
 

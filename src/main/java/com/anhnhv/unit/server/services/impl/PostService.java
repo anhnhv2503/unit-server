@@ -1,10 +1,10 @@
 package com.anhnhv.unit.server.services.impl;
 
-import com.anhnhv.unit.server.enums.PostMediaType;
 import com.anhnhv.unit.server.dto.response.PostDTO;
 import com.anhnhv.unit.server.entities.Post;
 import com.anhnhv.unit.server.entities.PostMedia;
 import com.anhnhv.unit.server.entities.User;
+import com.anhnhv.unit.server.enums.PostMediaType;
 import com.anhnhv.unit.server.mapper.PostMapper;
 import com.anhnhv.unit.server.repository.CommentRepository;
 import com.anhnhv.unit.server.repository.LikeRepository;
@@ -22,9 +22,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -34,14 +36,14 @@ public class PostService implements IPostService {
 
     PostRepository postRepository;
     IUserService userService;
-    AmazonClientService amazonClientService;
     PostMediaRepository postMediaRepository;
     LikeRepository likeRepository;
     CommentRepository commentRepository;
     PostMapper postMapper;
+    CloudinaryService cloudinaryService;
 
     @Override
-    public Post createPost(String content, MultipartFile[] files) {
+    public Post createPost(String content, MultipartFile[] files) throws IOException {
         User user = userService.getAuthenticatedUser();
         Post post = new Post();
         post.setContent(content);
@@ -52,7 +54,9 @@ public class PostService implements IPostService {
             for (MultipartFile file : files) {
                 PostMedia postMedia = new PostMedia();
                 postMedia.setType(PostMediaType.PHOTO);
-                postMedia.setUrl(amazonClientService.uploadFile(file));
+                Map r = cloudinaryService.upload(file);
+                String url = (String) r.get("url");
+                postMedia.setUrl(url);
                 postMedia.setPost(post);
                 listMedia.add(postMedia);
             }

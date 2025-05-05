@@ -20,5 +20,12 @@ public class Notification {
     private String title;
     private String content;
     private boolean isRead;
+    private String location;
+    private String type;
+    private String relatedId;
+    @ManyToOne
+    private User user;
+    @ManyToOne
+    private User interactionUser;
 
 }
