@@ -37,6 +37,7 @@ public class AuthenticationService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        refreshTokenService.deleteByUserId(userDetails.getId());
 
         String jwt = jwtUtils.generateJwtToken(userDetails);
 

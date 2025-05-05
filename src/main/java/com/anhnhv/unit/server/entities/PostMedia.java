@@ -1,6 +1,6 @@
 package com.anhnhv.unit.server.entities;
 
-import com.anhnhv.unit.server.PostMediaType;
+import com.anhnhv.unit.server.enums.PostMediaType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;

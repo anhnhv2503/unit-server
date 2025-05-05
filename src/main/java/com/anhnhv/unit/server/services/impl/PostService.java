@@ -1,6 +1,6 @@
 package com.anhnhv.unit.server.services.impl;
 
-import com.anhnhv.unit.server.PostMediaType;
+import com.anhnhv.unit.server.enums.PostMediaType;
 import com.anhnhv.unit.server.dto.response.PostDTO;
 import com.anhnhv.unit.server.entities.Post;
 import com.anhnhv.unit.server.entities.PostMedia;

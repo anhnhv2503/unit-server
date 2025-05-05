@@ -1,4 +1,4 @@
-package com.anhnhv.unit.server;
+package com.anhnhv.unit.server.enums;
 
 public enum PostMediaType {
     PHOTO, VIDEO
