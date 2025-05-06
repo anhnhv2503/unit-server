@@ -45,6 +45,9 @@ public class LikeService implements ILikeService {
         like.setPost(post);
         likeRepository.save(like);
 
+        User author = userRepository.findById(post.getUser().getId()).orElseThrow(() -> new RuntimeException("User not found"));
+        
+
         return likeMapper.toLikeDTO(like);
     }
 }

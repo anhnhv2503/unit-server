@@ -1,11 +1,12 @@
 package com.anhnhv.unit.server.repository;
 
 import com.anhnhv.unit.server.entities.Notification;
+import com.anhnhv.unit.server.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
-    List<Notification> findByIsReadFalse();
+    List<Notification> findByUserIdAndRead(long userId, boolean isRead);
 }
