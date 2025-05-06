@@ -21,6 +21,7 @@ public class PostMedia {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(columnDefinition = "TEXT", length = 5000)
     private String url;
     @Enumerated(EnumType.STRING)
     private PostMediaType type;

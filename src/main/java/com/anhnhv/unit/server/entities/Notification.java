@@ -25,7 +25,5 @@ public class Notification {
     private String relatedId;
     @ManyToOne
     private User user;
-    @ManyToOne
-    private User interactionUser;
 
 }
