@@ -1,14 +1,16 @@
 package com.anhnhv.unit.server.services.impl;
 
+import com.anhnhv.unit.server.dto.request.NotificationPayload;
 import com.anhnhv.unit.server.dto.response.LikeDTO;
 import com.anhnhv.unit.server.entities.Like;
 import com.anhnhv.unit.server.entities.Post;
 import com.anhnhv.unit.server.entities.User;
+import com.anhnhv.unit.server.enums.NotificationType;
 import com.anhnhv.unit.server.mapper.LikeMapper;
 import com.anhnhv.unit.server.repository.LikeRepository;
 import com.anhnhv.unit.server.repository.PostRepository;
-import com.anhnhv.unit.server.repository.UserRepository;
 import com.anhnhv.unit.server.services.ILikeService;
+import com.anhnhv.unit.server.services.INotificationService;
 import com.anhnhv.unit.server.services.IUserService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +28,11 @@ public class LikeService implements ILikeService {
 
     LikeRepository likeRepository;
     PostRepository postRepository;
-    UserRepository userRepository;
     IUserService userService;
     LikeMapper likeMapper;
+    INotificationService notificationService;
+
+
 
     @Override
     public LikeDTO likePost(Long postId) {
@@ -45,9 +49,17 @@ public class LikeService implements ILikeService {
         like.setPost(post);
         likeRepository.save(like);
 
-        User author = userRepository.findById(post.getUser().getId()).orElseThrow(() -> new RuntimeException("User not found"));
-        
+        if(!user.getId().equals(post.getUser().getId())) {
+            NotificationPayload payload = new NotificationPayload();
+            payload.setContent(user.getFirstName() + " " + user.getLastName());
+            payload.setLocation(postId + "");
+            payload.setType(NotificationType.LIKE);
+            payload.setRelatedId(user.getId());
+            payload.setUserId(post.getUser().getId());
+            payload.setPostId(postId);
 
+            notificationService.sendNotification(payload);
+        }
         return likeMapper.toLikeDTO(like);
     }
 }

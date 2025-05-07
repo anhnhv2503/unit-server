@@ -1,13 +1,16 @@
 package com.anhnhv.unit.server.services.impl;
 
+import com.anhnhv.unit.server.dto.request.NotificationPayload;
 import com.anhnhv.unit.server.dto.response.CommentDTO;
 import com.anhnhv.unit.server.entities.Comment;
 import com.anhnhv.unit.server.entities.Post;
 import com.anhnhv.unit.server.entities.User;
+import com.anhnhv.unit.server.enums.NotificationType;
 import com.anhnhv.unit.server.mapper.CommentMapper;
 import com.anhnhv.unit.server.repository.CommentRepository;
 import com.anhnhv.unit.server.repository.PostRepository;
 import com.anhnhv.unit.server.services.ICommentService;
+import com.anhnhv.unit.server.services.INotificationService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -28,6 +31,7 @@ public class CommentService implements ICommentService {
     PostRepository postRepository;
     UserService userService;
     CommentMapper commentMapper;
+    INotificationService notificationService;
 
     @Override
     public CommentDTO createComment(Long postId, String content) {
@@ -39,6 +43,18 @@ public class CommentService implements ICommentService {
         comment.setContent(content);
         comment.setCreatedAt(LocalDateTime.now().toString());
        Comment savedComment = commentRepository.save(comment);
+
+        if(!user.getId().equals(post.getUser().getId())) {
+            NotificationPayload payload = new NotificationPayload();
+            payload.setContent(user.getFirstName() + " " + user.getLastName());
+            payload.setLocation(postId + "");
+            payload.setType(NotificationType.COMMENT);
+            payload.setRelatedId(user.getId());
+            payload.setUserId(post.getUser().getId());
+            payload.setPostId(postId);
+
+            notificationService.sendNotification(payload);
+        }
 
        return commentMapper.toCommentDTO(savedComment);
     }

@@ -1,5 +1,6 @@
 package com.anhnhv.unit.server.entities;
 
+import com.anhnhv.unit.server.enums.NotificationType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,11 +18,14 @@ public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(columnDefinition = "TEXT")
     private String content;
-    private boolean isRead;
+    private boolean isRead = false;
     private String location;
-    private String type;
-    private String relatedId;
+    @Enumerated(EnumType.STRING)
+    private NotificationType type;
+    private Long relatedId;
+    private Long postId;
     @ManyToOne
     private User user;
 
