@@ -1,25 +1,32 @@
 package com.anhnhv.unit.server.services.impl;
 
 import com.anhnhv.unit.server.dto.request.NotificationPayload;
+import com.anhnhv.unit.server.dto.response.NotificationDTO;
 import com.anhnhv.unit.server.entities.Notification;
 import com.anhnhv.unit.server.entities.User;
 import com.anhnhv.unit.server.enums.NotificationType;
+import com.anhnhv.unit.server.mapper.NotificationMapper;
 import com.anhnhv.unit.server.repository.NotificationRepository;
-import com.anhnhv.unit.server.repository.PostRepository;
 import com.anhnhv.unit.server.repository.UserRepository;
 import com.anhnhv.unit.server.services.INotificationService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class NotificationService implements INotificationService {
 
     private final NotificationRepository notificationRepository;
     private final UserRepository userRepository;
     private final UserService userService;
+    private final NotificationMapper notificationMapper;
+    private final SimpMessagingTemplate simpMessagingTemplate;
 
     @Override
     public void sendNotification(NotificationPayload payload) {
@@ -41,7 +48,11 @@ public class NotificationService implements INotificationService {
         notification.setRelatedId(payload.getRelatedId());
         notification.setPostId(payload.getPostId());
         notification.setUser(user);
+        notification.setCreatedAt(LocalDateTime.now());
+
         notificationRepository.save(notification);
+        List<Notification> unreadList = notificationRepository.findByUserIdAndIsReadFalse(user.getId());
+        simpMessagingTemplate.convertAndSend("/topic/unread/"+user.getId(), unreadList.size());
 
     }
 
@@ -55,9 +66,21 @@ public class NotificationService implements INotificationService {
     }
 
     @Override
-    public List<Notification> getMyNotifications() {
+    public List<NotificationDTO> getMyNotifications() {
 
         User user = userService.getAuthenticatedUser();
-        return notificationRepository.findByUserId(user.getId());
+        List<Notification> notificationList = notificationRepository.findByUserIdOrderByCreatedAtDesc(user.getId());
+
+        return notificationList.stream().map(notificationMapper::toNotificationDTO).toList();
+    }
+
+    @Override
+    public void makeRead(Long notificationId) {
+        Notification notification = notificationRepository.findById(notificationId).orElseThrow(() -> new RuntimeException("Notification not found"));
+        notification.setRead(true);
+        notificationRepository.save(notification);
+        List<Notification> unreadList = notificationRepository.findByUserIdAndIsReadFalse(notification.getUser().getId());
+        simpMessagingTemplate.convertAndSend("/topic/unread/"+notification.getUser().getId(), unreadList.size());
+
     }
 }
