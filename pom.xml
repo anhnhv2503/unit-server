@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.anhnhv.unit</groupId>
-	<artifactId>server</artifactId>
+	<artifactId>unit-server</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>server</name>
 	<description>Spring Boot Project for Unit Social Network</description>
